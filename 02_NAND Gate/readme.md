@@ -85,11 +85,3 @@ This shows inverter-like behavior of NAND under specific conditions.
 ## 🎯 Conclusion
 
 The CMOS NAND gate was successfully designed and verified using Cadence Virtuoso. Both transient and DC analyses confirm correct operation.
-
----
-
-## 🚀 Future Work
-
-* Noise margin analysis
-* Propagation delay calculation
-* Layout design and verification
