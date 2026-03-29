@@ -59,11 +59,3 @@ DC sweep analysis is intended to obtain the Voltage Transfer Characteristic (VTC
 ## 🎯 Conclusion
 
 The CMOS inverter was successfully designed and simulated. The transient response confirms correct switching behavior. Further analysis such as DC sweep will help evaluate noise margins and switching threshold.
-
----
-
-## 🚀 Future Work
-
-* DC sweep (VTC curve)
-* Power analysis
-* Layout design and LVS/DRC verification
