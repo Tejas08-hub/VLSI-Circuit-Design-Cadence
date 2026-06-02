@@ -1,205 +1,182 @@
-CMOS XOR Gate Design Using XNOR + Inverter
-Objective
+# CMOS XOR Gate Design Using XNOR + Inverter
 
-To design and verify a CMOS XOR gate in Cadence Virtuoso using a transistor-level XNOR gate followed by an inverter.
+## Objective
 
-Theory
+Design and verify a CMOS XOR gate in Cadence Virtuoso using a transistor-level XNOR gate followed by an inverter.
+
+---
+
+## Theory
 
 The XOR (Exclusive-OR) gate produces a logic HIGH only when the inputs are different.
 
-Truth Table:
+### Truth Table
 
-A	B	XOR
-0	0	0
-0	1	1
-1	0	1
-1	1	0
+| A | B | XOR |
+|---|---|-----|
+| 0 | 0 | 0 |
+| 0 | 1 | 1 |
+| 1 | 0 | 1 |
+| 1 | 1 | 0 |
 
-Boolean Expression:
+### Boolean Expression
 
-Y=A
-′
-B+AB
-′
+```
+Y = A'B + AB'
+```
 
-Design Methodology
+---
+
+## Design Methodology
 
 Instead of directly implementing the XOR function, the design was realized in two stages:
 
-Stage 1: XNOR Gate
+### Stage 1: XNOR Gate
 
 The XNOR function is:
 
-Y
-XNOR
-	​
+```
+Y = AB + A'B'
+```
 
-=AB+A
-′
-B
-′
+### XNOR Truth Table
 
-Truth Table:
-
-A	B	XNOR
-0	0	1
-0	1	0
-1	0	0
-1	1	1
+| A | B | XNOR |
+|---|---|------|
+| 0 | 0 | 1 |
+| 0 | 1 | 0 |
+| 1 | 0 | 0 |
+| 1 | 1 | 1 |
 
 The XNOR network was implemented using complementary CMOS logic.
 
-Pull-Up Network (PMOS)
+#### PMOS Pull-Up Network
 
-The PMOS network implements:
+Implements:
 
-AB+A
-′
-B
-′
-
-Structure:
-
-Series PMOS pair controlled by A and B
-Series PMOS pair controlled by A' and B'
-Both branches connected in parallel
-Pull-Down Network (NMOS)
-
-The NMOS network implements the complement:
-
-A
-′
-B+AB
-′
+```
+AB + A'B'
+```
 
 Structure:
 
-Series NMOS pair controlled by A' and B
-Series NMOS pair controlled by A and B'
-Both branches connected in parallel
-Stage 2: Inverter
+- PMOS(A) in series with PMOS(B)
+- PMOS(A') in series with PMOS(B')
+- Both branches connected in parallel
 
-The output of the XNOR gate is passed through a CMOS inverter.
+#### NMOS Pull-Down Network
 
-Output equation:
+Implements:
 
-Y=(AB+A
-′
-B
-′
-)
-′
+```
+A'B + AB'
+```
 
-Applying De Morgan's theorem:
+Structure:
 
-Y=A
-′
-B+AB
-′
+- NMOS(A') in series with NMOS(B)
+- NMOS(A) in series with NMOS(B')
+- Both branches connected in parallel
 
-which is the XOR function.
+---
 
-Why Not Directly Use A'B + AB'?
+### Stage 2: Inverter
 
-A common mistake is to directly construct only the expression:
+The XNOR output is connected to a CMOS inverter.
 
-A
-′
-B+AB
-′
+```
+XOR = (XNOR)'
+```
 
-using NMOS transistors and assume that the circuit behaves as an XOR gate.
+Using De Morgan's theorem:
 
-This is incorrect for static CMOS design.
+```
+Y = (AB + A'B')'
+  = A'B + AB'
+```
 
-Reason
+Thus, the final output becomes XOR.
 
-In static CMOS:
+---
 
-PMOS Pull-Up Network generates logic HIGH.
-NMOS Pull-Down Network generates logic LOW.
+## Why Not Directly Implement A'B + AB'?
 
-The NMOS network must implement the conditions under which the output becomes 0.
+A common mistake is to implement only:
 
-For XOR:
+```
+A'B + AB'
+```
 
-Y=A
-′
-B+AB
-′
+and assume that the circuit behaves as a complete CMOS XOR gate.
 
-The output becomes LOW when:
+In static CMOS design:
 
-Y
-′
-=AB+A
-′
-B
-′
+- PMOS network generates logic HIGH.
+- NMOS network generates logic LOW.
+- Both networks must be complementary.
 
-Therefore:
+If only the expression above is implemented:
 
-PMOS network must realize XOR.
-NMOS network must realize XNOR.
+- Output node may float.
+- Intermediate voltages may appear.
+- Noise margin decreases.
+- Full rail-to-rail output may not be achieved.
 
-If only A'B + AB' is implemented in the NMOS network without constructing the complementary PMOS network, the output node can become floating for some input combinations, resulting in:
+Therefore, complementary PMOS and NMOS networks are required.
 
-Incorrect logic levels
-Intermediate voltages
-Poor noise margins
-Static CMOS violation
-Design Parameters
+---
 
-Technology: GPDK 90 nm
+## Design Parameters
 
-Supply Voltage:
+| Parameter | Value |
+|------------|--------|
+| Technology | GPDK 90nm |
+| VDD | 1.8V |
+| VSS | 0V |
+| NMOS Width | 120nm |
+| NMOS Length | 180nm |
+| PMOS Width | 240nm |
+| PMOS Length | 180nm |
 
-VDD = 1.8 V
-VSS = 0 V
+---
 
-Initial Device Dimensions:
+## Simulation Setup
 
-Device	Width	Length
-NMOS	120 nm	180 nm
-PMOS	240 nm	180 nm
-Simulation Setup
+### Analysis
 
-Analysis Type:
-
+```
 Transient Analysis
+```
 
-Input A:
+### Inputs
 
-Pulse Source
-Period = 40 ns
+- Input A : Pulse Source
+- Input B : Pulse Source
 
-Input B:
+### Observed Signals
 
-Pulse Source
-Period = 80 ns
+- A
+- B
+- XNOR Output
+- XOR Output
 
-Observed Signals:
+---
 
-A
-B
-XNOR output
-XOR output
-Verification
+## Results
 
-The simulated waveform verified the following XOR truth table:
+The simulated output matched the XOR truth table.
 
-A	B	Output
-0	0	0
-0	1	1
-1	0	1
-1	1	0
+| A | B | XOR Output |
+|---|---|------------|
+| 0 | 0 | 0 |
+| 0 | 1 | 1 |
+| 1 | 0 | 1 |
+| 1 | 1 | 0 |
 
-The output exhibited full voltage swing between 0 V and 1.8 V after correcting the supply configuration.
+The output achieved full voltage swing from 0V to 1.8V.
 
-Key Learning Outcomes
-Understanding of complementary CMOS design.
-Difference between XOR and XNOR implementations.
-Relationship between Pull-Up and Pull-Down networks.
-Application of De Morgan's theorem in CMOS logic synthesis.
-Importance of proper power supply connections.
-Verification of transistor-level digital circuits using transient simulation in Cadence Virtuoso.
+---
+
+## Conclusion
+
+A transistor-level CMOS XOR gate was successfully designed and verified in Cadence Virtuoso using an XNOR gate followed by an inverter. The design demonstrates complementary CMOS logic principles, Boolean algebra implementation, and transient verification techniques used in VLSI design.
