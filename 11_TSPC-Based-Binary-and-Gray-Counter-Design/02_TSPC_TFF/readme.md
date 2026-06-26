@@ -195,7 +195,3 @@ The simulation confirms:
 └── README.md
 ```
 
-
-VLSI Design and Semiconductor Enthusiast
-
----
