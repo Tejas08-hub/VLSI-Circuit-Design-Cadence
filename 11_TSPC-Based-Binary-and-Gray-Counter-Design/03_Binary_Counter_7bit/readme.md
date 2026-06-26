@@ -281,19 +281,6 @@ Simulation confirms:
 ├── waveform.png
 └── README.md
 ```
-
----
-
-## Author
-
-**Tejas**
-
-Electronics and Communication Engineering (ECE)
-
-VLSI Design and Semiconductor Enthusiast
-
----
-
 ## Conclusion
 
 A 7-Bit Binary Counter was successfully designed and simulated using TSPC T Flip-Flops in Cadence Virtuoso. The transient simulation results verify correct binary counting behavior and demonstrate the effectiveness of TSPC logic for high-speed sequential circuit design.
